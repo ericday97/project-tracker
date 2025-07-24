@@ -1,47 +1,46 @@
-import { GoogleLogin } from "../components/GoogleLogin";
-import { useAtom } from "jotai";
-import { userAtom } from "../state/auth";
-import { Button, Typography, Avatar, Flex, Card } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Typography, Layout, Breadcrumb, theme, Space } from "antd";
+import TopMenu from "../components/TopMenu";
+import { Outlet } from "react-router-dom";
 
-const { Text } = Typography;
+const { Title } = Typography;
+const { Header, Content, Footer } = Layout;
 
 const Home = () => {
-    const [user, setUser] = useAtom(userAtom);
-    const navigate = useNavigate();
-    
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+
   return (
     <>
-      <Card title="Project Tracker">
-        {user ? (
-          <Flex gap="middle">
-            <Avatar src={user.picture} size={64} />
-
-            <Flex align="start" vertical>
-              <Text>{user.name}</Text>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {user.email}
-              </Text>
-            </Flex>
-
-            <Flex vertical>
-              <Button danger onClick={() => setUser(null)}>
-                Sign out
-              </Button>
-              <Button onClick={() => navigate("/projects")}>
-                View Projects
-              </Button>
-              <Button onClick={() => navigate("/add-project")}>
-                Add Project
-              </Button>
-            </Flex>
-          </Flex>
-        ) : (
-          <GoogleLogin />
-        )}
-      </Card>
+      <Layout style={{ minHeight: "100vh" }}>
+        <Header style={{ display: "flex", alignItems: "center" }}>
+          <Space>
+            <Title level={2}>Project Tracker</Title>
+          </Space>
+          <TopMenu />
+        </Header>
+        <Content style={{ padding: "0 48px" }}>
+          <Breadcrumb
+            style={{ margin: "16px 0" }}
+            items={[{ title: "Home" }, { title: "List" }, { title: "App" }]}
+          />
+          <div
+            style={{
+              background: colorBgContainer,
+              minHeight: 280,
+              padding: 24,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Outlet />
+          </div>
+        </Content>
+        <Footer style={{ textAlign: "center" }}>
+          ©{new Date().getFullYear()} Created by One Line Away
+        </Footer>
+      </Layout>
     </>
   );
-}
+};
 
-export default Home
+export default Home;

@@ -1,13 +1,14 @@
+// src/components/GoogleLogin.tsx
 import { useEffect, useRef } from 'react'
 import { useSetAtom } from 'jotai'
-import { userAtom } from '../state/auth'
+import { userWithPersistenceAtom } from '../state/auth'
 import { loadGoogleScript } from '../services/googleAuth'
 
 const CLIENT_ID = '864537611518-ihck2uq95nc2dg17tjbtr64d2q9ctpff.apps.googleusercontent.com'
 
 export function GoogleLogin() {
   const divRef = useRef<HTMLDivElement>(null)
-  const setUser = useSetAtom(userAtom)
+  const setUser = useSetAtom(userWithPersistenceAtom)
 
   useEffect(() => {
     loadGoogleScript().then(() => {
